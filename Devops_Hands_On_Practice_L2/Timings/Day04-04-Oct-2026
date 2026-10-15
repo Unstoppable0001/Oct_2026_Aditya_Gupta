@@ -1,0 +1,6 @@
+On AWS instance, users cannot directly access the servers, we need to make changes to /etc/ssh/sshd_config file, toggle parameter
+PasswordAuthentication Yes
+Only after thsi, user will be allowed to connect via ssh
+
+
+try to extcute ansbile yaml
