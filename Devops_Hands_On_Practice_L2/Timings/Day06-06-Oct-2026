@@ -1,8 +1,0 @@
-aws service: 
-  IAM: user, group , Role
-  EC2: create instance use session manager
-  PAAS: Elastic Beans stack: read  
-  Create policy and use policy generator
-
-
-linux & git basic
