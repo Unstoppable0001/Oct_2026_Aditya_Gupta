@@ -52,6 +52,6 @@ docker --version
 docker run ubuntu echo "Hello pathnex"
 
 #Docker File 
-from ubuntu:22.04
+FROM ubuntu:22.04
 CMD ["echo", "Hello Pathnex"]
 #############################################
