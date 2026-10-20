@@ -1,0 +1,4 @@
+created the cluster, deleted node via cli
+faced issue, instance was present but pods in pending started
+issue of resource
+try to upgrade version and addon
