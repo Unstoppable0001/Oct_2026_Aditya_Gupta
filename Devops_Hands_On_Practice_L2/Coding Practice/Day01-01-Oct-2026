@@ -1,36 +1,33 @@
-## Day 1 - Basics
+## Days 1 - Basics
 
-# 1 Ansible Task - Install Nginx on Pathnex Server
+# Ansible tasks -InstallNginx on pathnex Server
 
 ---
-- name: Install Nginx on Pathnex sever
-  host: all
-  become:yes
+- name: Install Nginx on Pathnex Server
+  host: all 
+  bescome: yes
 
   tasks:
-    - name: Install nginx
+    - name: Install Nginx
       yum:
-        name: nginx 
+        name: naginx
         state: Present
-
 ---
 
+#############################################3
 
-##########################################################
-# 2 Docker
-## Docker Installation & First Container
+## 2 Docker Installation &  First Container
 
+# 1. setup Docker apt repository;
+# 2. Add Docekr's offiical GPG key:
 
-
-# 1. Set up Docker apt repository: 
-# Add Docker's official GPG key:
 sudo apt update
 sudo apt install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-# Add the repository to Apt sources:
+# Add the repository to apt sources:
 sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
 Types: deb
 URIs: https://download.docker.com/linux/ubuntu
@@ -42,18 +39,19 @@ EOF
 
 sudo apt update
 
-# 2. To  install the Docker packages:
+# 2. To install the Docker packages:
+
 sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # 3. After installation, verify that Docker is running:
 
 sudo systemctl status docker 
-sudo systemctl start docker
+sudo systemctl start docker 
 
 docker --version
-docker run ubuntu echo "Hello Pathnex"
+docker run ubuntu echo "Hello pathnex"
 
-# Docker File
-FROM ubuntu:22.04
+#Docker File 
+from ubuntu:22.04
 CMD ["echo", "Hello Pathnex"]
-
+#############################################
