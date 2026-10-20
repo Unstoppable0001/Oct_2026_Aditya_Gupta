@@ -10,7 +10,7 @@
   tasks:
     - name: Install Nginx
       yum:
-        name: naginx
+        name: nginx
         state: Present
 ---
 
@@ -18,8 +18,8 @@
 
 ## 2 Docker Installation &  First Container
 
-# 1. setup Docker apt repository;
-# 2. Add Docekr's offiical GPG key:
+# 1. setup Docker apt repository:
+# 2. Add Docekr's official GPG key:
 
 sudo apt update
 sudo apt install ca-certificates curl
