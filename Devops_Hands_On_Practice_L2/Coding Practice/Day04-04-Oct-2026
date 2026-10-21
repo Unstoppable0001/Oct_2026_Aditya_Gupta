@@ -1,3 +1,133 @@
+# Day 4
+
+## 1  Basic CI pipeline
+
+##Jenkinsfile 
+
+pipeline{
+  agent any
+  stages{
+    stage('Build'){
+      steps{
+        echo 'Building Project"
+      }
+    }
+    stage('Test') {
+      steps{
+        echo 'Running tests'
+      }
+    }
+    stage('Deploy'){
+      echo 'Deploying application'
+    }
+
+
+  }
+}
+
+##GitLab
+
+stages:
+  - build
+  - test
+  - deploy
+
+buid:
+  stage: build
+  script: 
+    - echo 'Building Project'
+test:
+  stage: test
+  script: 
+    - echo 'Runing tests'
+deploy:
+  stage: deploy
+  script:
+    - echo 'deployment application'
+
+#####################################################
+
+## 2 Ansible - Install and Configure Nginx
+
+---
+- name: Install and configure Nginx
+  hosts: all
+  become: yes
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: present
+    - name: configure nginx
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+    - name: start nginx service
+      service:
+        name: nginx 
+        state: started
+        enabled: yes
+---
+
+################################################
+## 3 Terraform - EC2 with security group
+
+resource "aws_security_group" "example"{
+  name         = "example_security_group"
+  description  = "Allow ssh and http"
+  ingress {
+    from_port    = 22
+    to_port      = 22
+    protocal     = "tcp"
+    cider_blocks = ["0.0.0.0/0]
+  }
+  egress{
+    from_port    = 0
+    to_port      = 0
+    portocal     = "-1"
+    cider_blocks = ["0.0.0.0/0]
+  }
+
+}
+
+#######################################################
+
+## 4 Docker - Apache containerPort
+
+FROM ubuntu:22.04
+RUN apt update && apt install apache -y 
+RUN echo "Hello Pathnex" > /var/www/html/index.html
+CMD ["apache", "-D", "FOREGROUND"] 
+
+
+# Bash Real Path
+/var/www/html
+
+########################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## day 4
 
 ## 1 Jenkinsfile — Basic CI Pipeline
