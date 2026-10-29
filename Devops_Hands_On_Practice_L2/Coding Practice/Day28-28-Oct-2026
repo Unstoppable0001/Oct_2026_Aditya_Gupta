@@ -1,0 +1,59 @@
+## Day 28
+
+###########################################################
+
+## 1 
+
+---
+- name: Setup VPC Peering Between Accounts
+  hosts: localhost
+  tasks:
+    - name: Create VPC peering connection
+      command: aws ec2 create-vpc-peering-connection --vpc-id vpc-12345678 --peer-vpc-id vpc-87654321
+---
+
+###############################################################
+
+## 2
+
+resource "aws_vpc_peering_connection" "Aditya_peering" {
+  vpc_id      = aws_vpc.Aditya_vpc.id
+  peer_vpc_id = aws_vpc.peer_vpc.id
+}
+
+resource "aws_route" "Aditya_route" {
+  route_table_id         = aws_route_table.Aditya_rt.id
+  destination_cidr_block = "10.0.0.0/16"
+  vpc_peering_connection_id = aws_vpc_peering_connection.Aditya_peering.id
+}
+
+##########################################################
+
+## 3 
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: Aditya-vpc-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: Aditya-app
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: Aditya-db
+---
+
+#########################################################
+
+
+## 4
+
+docker save -o Aditya-nginx.tar Aditya-nginx
+
+docker load -i Aditya-nginx.tar
+
+docker run --rm -v Aditya-volume:/data -v $(pwd):/backup ubuntu tar czf /backup Aditya-backup.tar.gz /data
