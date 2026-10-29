@@ -1,0 +1,105 @@
+## Day 26
+
+## 1
+---
+- name: Implement SSH Key Authentication
+  hosts: all
+  become: yes
+  tasks:
+    - name: Generate SSH key pair
+      command: ssh-keygen -t rsa -b 2048 -f /home/user/.ssh/id_rsa -N ""
+    - name: Add SSH public key to authorized_keys
+      authorized_key:
+        user: user
+        state: present
+        key: "{{ lookup('file', '/home/user/.ssh/id_rsa.pub') }}"
+---
+
+#######################################################
+
+## 2
+
+resource "aws_vpc_flow_log" "Aditya_flow_log" {
+  log_group_name = "Aditya-flow-logs"
+  vpc_id         = aws_vpc.Aditya_vpc.id
+  traffic_type   = "ALL"
+  log_destination_type = "cloud-watch-logs"
+}
+
+resource "aws_cloudwatch_log_group" "Aditya_flow_logs_group" {
+  name = "Aditya-flow-logs"
+}
+
+##################################################
+
+## 3
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: Aditya-web-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: Aditya-web-app
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: Aditya-api
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: Aditya-database
+---
+
+##########################################################
+## 4
+             
+pipeline {
+    agent any
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+    }
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building Docker image...'
+                docker.build('Aditya-web-app')
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying to AWS EC2...'
+                sh 'aws ec2 run-instances --image-id ami-0abcd1234 --count 1 --instance-type t2.micro'
+            }
+        }
+    }
+}
+
+
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - docker build -t Aditya-web-app .
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying with secure credentials"
+    - aws ec2 run-instances --image-id ami-0abcd1234 --count 1 --instance-type t2.micro --access-key $AWS_ACCESS_KEY --secret-key $AWS_SECRET_KEY
+
+#################################################################################################
+
+docker logs Aditya-nginx
+docker inspect Aditya-nginx

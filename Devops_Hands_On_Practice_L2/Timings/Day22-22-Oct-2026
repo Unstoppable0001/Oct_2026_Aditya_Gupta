@@ -1,0 +1,1 @@
+create Prometheus and grafana dashboard use node_expoter as sidecar containers
